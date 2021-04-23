@@ -54,6 +54,21 @@ module mux2 #(parameter WIDTH = 8)(
     assign y = s ? d1 : d0;    
 endmodule
 
+module mux4 #(parameter Width = 32)(
+  input        [Width-1:0] d0, d1, d2, d3,
+  input        [1:0]       s,
+  output logic [Width-1:0] y
+);
+    always_comb begin
+        unique case(s)
+            2'b00: y = d0;
+            2'b01: y = d1;
+            2'b10: y = d2;
+            2'b11: y = d3;
+        endcase
+    end
+endmodule
+
 module regfile(
     input logic clk, we3,
     input logic [4:0] ra1, ra2, wa3,
@@ -74,13 +89,6 @@ module signext(
     output logic [31:0] y
 );
     assign y = {{16{a[15]}}, a};
-endmodule
-
-module unsignext(
-    input logic [15:0] a,
-    output logic [31:0] y
-);
-    assign y = {{16{0}}, a};
 endmodule
 
 module alu(
