@@ -29,8 +29,9 @@ module mips(
     input  logic [31:0] readdata
     );
 
-    logic       memtoreg, alusrc, regdst, regwrite, jump, pcsrc, zero, immext;
+    logic       memtoreg, alusrc, regdst, regwrite, pcsrc, zero, immext;
     logic [2:0] alucontrol;
+    logic [2:0] jump;
 
     controller  c(instr[31:26], instr[5:0], zero, memtoreg, memwrite, pcsrc, alusrc, regdst, regwrite, jump, alucontrol, immext);
     datapath    dp(clk, reset, memtoreg, pcsrc, alusrc, regdst, regwrite, jump, alucontrol, zero, pc, instr, aluout, writedata, readdata);

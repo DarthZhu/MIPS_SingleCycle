@@ -21,14 +21,15 @@
 
 
 module datapath(
-    input logic clk, reset, memtoreg, pcsrc, alusrc, regdst, regwrite, jump,
-    input logic [2:0] alucontrol,
-    output logic zero,
+    input  logic        clk, reset, memtoreg, pcsrc, alusrc, regdst, regwrite,
+    input  logic [2:0]  jump,
+    input  logic [2:0]  alucontrol,
+    output logic        zero,
     output logic [31:0] pc,
-    input logic [31:0] instr,
+    input  logic [31:0] instr,
     output logic [31:0] aluout, writedata,
-    input logic [31:0] readdata,
-    input logic [1:0] immext
+    input  logic [31:0] readdata,
+    input  logic [1:0]  immext
     );
 
     logic [4:0] writereg;
@@ -40,16 +41,27 @@ module datapath(
     sl2         immsh(signimm, signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(32)  pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
-    mux2 #(32)  pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, jump, pcnext);
+    // mux2 #(32)  pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, jump, pcnext);
+    mux4 #(32)  pcjumpmux(
+        pcnextbr, 
+        {pcplus4[31:28], instr[25:0], 2'b00},
+        srca,
+        'x,    // not used
+        jump[1:0]);
 
     // register file logic
     regfile     rf(clk, regwrite, instr[25:21], instr[20:16], writereg, result, srca, writedata);
-    mux2 #(5)   wrmux(instr[20:16], instr[15:11], regdst, writereg);
+    // mux2 #(5)   wrmux(instr[20:16], instr[15:11], regdst, writereg);
+    mux4 #(5) wrmux(
+        instr[20:16],
+        instr[15:11],
+        5'b11111,   // $ra
+        'x,
+        {jump[2], regdst},
+        writereg
+    );
     mux2 #(32)  resmux(aluout, readdata, memtoreg, result);
     signext     se(instr[15:0], signimm);
-    // unsignext   use(instr[15:0], unsignimm);
-    // TODO
-    // JAL datapath
     
     // ALU logic
     mux2 #(32)  srcbmux(writedata, signimm, alusrc, srcb);
