@@ -47,7 +47,8 @@ module datapath(
         {pcplus4[31:28], instr[25:0], 2'b00},
         srca,
         'x,    // not used
-        jump[1:0]);
+        jump[1:0],
+        pcnext);
 
     // register file logic
     regfile     rf(clk, regwrite, instr[25:21], instr[20:16], writereg, result, srca, writedata);
