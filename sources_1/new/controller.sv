@@ -34,7 +34,7 @@ module controller(
     logic [2:0] aluop;
     logic       branch, nbranch;
 
-    maindec md(op, memtoreg, memwrite, branch, nbranch, alusrc, regdst, regwrite, jump, aluop, immext);
+    maindec md(op, funct, memtoreg, memwrite, branch, nbranch, alusrc, regdst, regwrite, jump, aluop, immext);
     aludec  ad(funct, aluop, alucontrol);
 
     assign pcsrc = (branch & zero) | (nbranch & (^zero));
@@ -42,6 +42,7 @@ endmodule
 
 module maindec(
     input  logic [5:0]  op,
+    input  logic [5:0]  funct,
     output logic        memtoreg, memwrite,
     output logic        branch, nbranch,
     output logic        alusrc,
@@ -55,9 +56,13 @@ module maindec(
             memtoreg, jump, aluop, immext} = controls;
     always_comb
         case(op)                   //  rr_a_bn_mm_jjj_aaa_i
-            6'b000000: controls <= 14'b11_0_00_00_000_010_0;  // RTYPE
+            6'b000000: begin
+                case(funct)
+                    6'b001000: controls <= 14'b00_0_00_00_010_000_0;  // JR
+                    default:   controls <= 14'b11_0_00_00_000_010_0;  // RTYPE
+                endcase
+            end
             6'b000010: controls <= 14'b00_0_00_00_001_000_0;  // J
-            6'b001000: controls <= 14'b00_0_00_00_010_000_0;  // JR
             6'b000011: controls <= 14'b10_1_00_00_101_000_0;  // JAL
             6'b100011: controls <= 14'b10_1_00_01_000_000_0;  // LW
             6'b101011: controls <= 14'b00_1_00_10_000_000_0;  // SW
