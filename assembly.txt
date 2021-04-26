@@ -1,0 +1,19 @@
+main:
+    addi    $s0, $zero, 0
+    sw      $s0, 0x80
+chkSwitch:
+    lw      $s1, 0x80
+    andi    $s2, $s1, 0x2
+    beq     $s2, $zero, chlSwitch
+    lw      $s3, 0x88
+    lw      $s4, 0x8c
+    add     $s5, $s4, $s3
+chkLED:
+    lw      $s1, 0x80
+    andi    $s2, $s1, 0x1
+    beq     $s2, $zero, chkLED
+    sw      $s5, 0x84
+    jal     chkJ
+    j       chkSwitch
+chkJ:
+    jr      $ra
