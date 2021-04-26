@@ -33,7 +33,7 @@ module datapath(
     );
 
     logic [4:0] writereg;
-    logic [31:0] pcnext, pcnextbr, pcplus4, pcbranch, signimm, signimmsh, srca, srcb, result, unsignimm;
+    logic [31:0] pcnext, pcnextbr, pcplus4, pcbranch, signimm, signimmsh, srca, srcb, result, unsignimm, writeregdata;
 
     // next PC logic
     flopr #(32) pcreg(clk, reset, pcnext, pc);
@@ -51,7 +51,7 @@ module datapath(
         pcnext);
 
     // register file logic
-    regfile     rf(clk, regwrite, instr[25:21], instr[20:16], writereg, result, srca, writedata);
+    regfile     rf(clk, regwrite, instr[25:21], instr[20:16], writereg, writeregdata, srca, writedata);
     // mux2 #(5)   wrmux(instr[20:16], instr[15:11], regdst, writereg);
     mux4 #(5) wrmux(
         instr[20:16],
@@ -62,6 +62,12 @@ module datapath(
         writereg
     );
     mux2 #(32)  resmux(aluout, readdata, memtoreg, result);
+    mux2 #(32)  writeregdata_mux(
+        result,
+        pcplus4,
+        jump[2],
+        writeregdata
+    );
     signext     se(instr[15:0], signimm);
     
     // ALU logic
