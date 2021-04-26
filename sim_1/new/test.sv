@@ -58,27 +58,27 @@
 
 module test(
     );
-    logic clk;
-    logic reset,L,R;
-    logic [15:0]SW;
-    logic [7:0]AN;
-    logic DP;
-    logic [6:0]A2G;
+    logic           clk;
+    logic           reset,L,R;
+    logic [15:0]    SW;
+    logic [7:0]     AN;
+    logic           DP;
+    logic [6:0]     A2G;
 
-    top dut(clk,reset,L,R,SW,AN,DP,A2G);
+    top dut(clk, reset, L, R, SW, AN, DP, A2G);
     initial
         begin
             SW <= 16'h1234;
             reset <=1;
-            #50;
+            #10;
             reset <=0;
-            #50;
+            #10;
             R <= 1;
-            #50;
+            #10;
             R <= 0;
-            #200;
+            #10;
             L <= 1;
-            #50;
+            #10;
             L <= 0;
         end            
         always
