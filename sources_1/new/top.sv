@@ -21,17 +21,10 @@
 
 
 module top (
-    // Simulation input
-    // input  logic        clk, reset,
-
     // IO input
     input  logic        CLK100MHZ, BTNC, // BTNC FOR RESET
     input  logic        BTNL, BTNR,
     input  logic [15:0] SW,
-
-    // Simulation output
-    // output logic [31:0] writedata, dataadr,
-    // output logic        memwrite,
 
     // IO output
     output logic [7:0]  AN,
@@ -46,7 +39,6 @@ module top (
     assign IOclock = ~CLK100MHZ;
     imem imem(pc[7:2], instr);
     mips mips(CLK100MHZ, BTNC, pc, instr, Write, dataadr, writedata, readdata);
-    // dmem dmem(clk, memwrite, dataadr, writedata, readdata);
     DataMemoryDecoder dmem(CLK100MHZ, Write, dataadr, writedata, readdata,
                            IOclock, BTNC, BTNL, BTNR, SW, AN, DP, A2G);
 endmodule
