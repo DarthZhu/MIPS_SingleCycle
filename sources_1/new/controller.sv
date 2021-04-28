@@ -28,7 +28,7 @@ module controller(
     output logic        regdst, regwrite,
     output logic [2:0]  jump,
     output logic [2:0]  alucontrol,
-    output logic [1:0]  immext
+    output logic        immext
     );
 
     logic [2:0] aluop;
@@ -90,11 +90,11 @@ module aludec(
             3'b100: alucontrol <= 3'b000; // AND
             3'b101: alucontrol <= 3'b111; // SLT
             default: case (funct)
-                6'b100000: alucontrol <= 3'b010;
-                6'b100010: alucontrol <= 3'b110;
-                6'b100100: alucontrol <= 3'b000;
-                6'b100101: alucontrol <= 3'b001;
-                6'b101010: alucontrol <= 3'b111;
+                6'b100000: alucontrol <= 3'b010;    // ADD
+                6'b100010: alucontrol <= 3'b110;    // SUB
+                6'b100100: alucontrol <= 3'b000;    // AND
+                6'b100101: alucontrol <= 3'b001;    // OR
+                6'b101010: alucontrol <= 3'b111;    // SLT
                 default:   alucontrol <= 3'bxxx;
             endcase
         endcase

@@ -29,7 +29,7 @@ module datapath(
     input  logic [31:0] instr,
     output logic [31:0] aluout, writedata,
     input  logic [31:0] readdata,
-    input  logic [1:0]  immext
+    input  logic        immext
     );
 
     logic [4:0] writereg;
