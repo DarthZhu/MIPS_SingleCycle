@@ -1,7 +1,5 @@
 # MIPS_SingleCycle
 
-[TOC]
-
 ## 1. MIPS指令集
 
 ### 1.1 实现的指令集
