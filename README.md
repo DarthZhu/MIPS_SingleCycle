@@ -219,7 +219,7 @@ endmodule
 
 datapath部分是一个整体，但按功能区分可以分为3个主要的部分：下一个pc地址；寄存器读取；alu操作。下图为基础的mips数据路径：
 
-![](D:\Study\College\Junior\Computer Architecture Laboratory\lab2\mips.png)
+![](\mips.png)
 
 数据路径的流程为：从pc地址处在指令内存中取指令，将高6位交给controller部件解析对应的控制信号，datapath读取这些控制信号完成对应的操作。加入J类型指令后，数据路径需要做相对应的调整，在计算pc的时候需要考虑到jump指令的地址；同时，在写寄存器时，也要考虑到`JAL`指令写入`$ra`寄存器的需求。
 
@@ -482,7 +482,7 @@ endmodule
 
 ### 3.1 基础实验结果
 
-![](D:\Study\College\Junior\Computer Architecture Laboratory\lab2\result_12+34=46.jpg)
+![](\result_12+34=46.jpg)
 
 ### 3.2 测试JAL以及JR指令正确性
 
@@ -534,4 +534,4 @@ ac150084
 
 `JAL`对应的jump信号为101，pcnext的地址为`chkJ`地址`0x00000038`；`JR`对应的jump信号为010，pcnext的地址为`$ra`寄存器中的地址，即`J`指令的地址`0x00000034`处；`J`指令的jump信号为001，跳转到`chkSwitch`地址`0x00000008`处。下图所示的模拟结果就是汇编中写到的测试jump指令。调用`JAL`跳转到`JR`指令再返回`JAL`下面的`J`指令，可以看出，实现的jump类型的指令都跳转到了正确的地址上了。
 
-![](D:\Study\College\Junior\Computer Architecture Laboratory\lab2\jump_test.png)
+![](\jump_test.png)
